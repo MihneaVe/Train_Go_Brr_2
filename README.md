@@ -1,161 +1,161 @@
-# README - Sistem de Management al Gării Feroviare
+# README - Railway Station Management System
 
-## Descriere generală
+## General Description
 
-Aplicația reprezintă un sistem de gestionare a unei gări feroviare care permite administrarea trenurilor, rutelor, stațiilor și biletelor. Sistemul facilitează operațiunile comune într-o gară, cum ar fi:
+The application represents a management system for a railway station that allows the administration of trains, routes, stations, and tickets. The system facilitates common operations in a station, such as:
 
-- Cumpărarea biletelor
-- Gestionarea rutelor
-- Programarea trenurilor
-- Administrarea utilizatorilor
+- Purchasing tickets
+- Managing routes
+- Scheduling trains
+- User administration
 
 ---
 
-## Structura aplicației
+## Application Structure
 
-### Pachetul `pkcg.model`
+### Package `pkcg.model`
 
-Acest pachet conține clasele model care reprezintă entitățile de bază ale sistemului:
+This package contains the model classes that represent the core entities of the system:
 
-- **`User` (clasă abstractă)**  
-    - Clasa de bază pentru utilizatori cu autentificare  
-    - Conține `username` și `parola` cu metode de autentificare  
+- **`User` (abstract class)**  
+    - Base class for authenticated users  
+    - Contains `username` and `password` with authentication methods  
 
-- **`Admin` (extinde `User`)**  
-    - Reprezentare pentru administratorii sistemului  
-    - Are drepturi sporite precum modificarea prețurilor sau adăugarea trenurilor  
+- **`Admin` (extends `User`)**  
+    - Represents system administrators  
+    - Has elevated rights such as modifying prices or adding trains  
 
-- **`Customer` (extinde `User`)**  
-    - Reprezintă clienții sistemului  
-    - Conține date personale (`nume complet`, `email`)  
-    - Poate achiziționa bilete și face rezervări  
+- **`Customer` (extends `User`)**  
+    - Represents system customers  
+    - Contains personal data (`full name`, `email`)  
+    - Can purchase tickets and make reservations  
 
 - **`Station`**  
-    - Reprezintă o stație de tren  
-    - Include numele stației și platformele disponibile  
-    - Gestionează lista de peroane ale stației  
+    - Represents a train station  
+    - Includes the station name and available platforms  
+    - Manages the list of platforms in the station  
 
 - **`Platform`**  
-    - Reprezintă un peron din stație  
-    - Are un număr unic de identificare  
+    - Represents a platform in the station  
+    - Has a unique identification number  
 
 - **`Train`**  
-    - Reprezintă un tren  
-    - Include `număr`, `tip` și `capacitate`  
+    - Represents a train  
+    - Includes `number`, `type`, and `capacity`  
 
 - **`Route`**  
-    - Reprezintă o rută între două stații  
-    - Conține `stația de plecare`, `stația de destinație` și `prețul de bază`  
+    - Represents a route between two stations  
+    - Contains `departure station`, `destination station`, and `base price`  
 
 - **`Schedule`**  
-    - Reprezintă programarea unui tren pe o anumită rută  
-    - Include `trenul`, `ruta`, `ora de plecare`, `ora de sosire` și `numărul peronului`  
+    - Represents the scheduling of a train on a specific route  
+    - Includes `train`, `route`, `departure time`, `arrival time`, and `platform number`  
 
 - **`Ticket`**  
-    - Reprezintă un bilet pentru călătorie  
-    - Conține detalii despre `client`, `programare`, `preț` și `clasă` (prima clasă sau nu)  
+    - Represents a travel ticket  
+    - Contains details about the `customer`, `schedule`, `price`, and `class` (first class or not)  
 
 - **`Reservation`**  
-    - Reprezintă o rezervare pentru un loc  
-    - Include `clientul`, `programarea`, `numărul locului` și `statusul confirmării`  
+    - Represents a seat reservation  
+    - Includes `customer`, `schedule`, `seat number`, and `confirmation status`  
 
 ---
 
-### Pachetul `pkcg.service`
+### Package `pkcg.service`
 
-Acest pachet conține clasele care implementează logica de business:
+This package contains the classes that implement business logic:
 
 - **`UserService`**  
-    - Gestionează utilizatorii sistemului  
-    - Permite înregistrarea administratorilor și clienților  
-    - Asigură funcționalitățile de autentificare și autorizare  
-    - Menține sesiunea utilizatorului curent  
+    - Manages system users  
+    - Allows registration of administrators and customers  
+    - Provides authentication and authorization functionalities  
+    - Maintains the current user session  
 
 - **`StationService`**  
-    - Administrează stațiile, trenurile, rutele și programările  
-    - Permite adăugarea și gestionarea stațiilor  
-    - Permite adăugarea și gestionarea trenurilor  
-    - Oferă funcționalități de căutare după stație destinație  
-    - Permite administrarea rutelor și actualizarea prețurilor  
-    - Gestionează rezervările de locuri  
+    - Manages stations, trains, routes, and schedules  
+    - Allows adding and managing stations  
+    - Allows adding and managing trains  
+    - Provides search functionalities by destination station  
+    - Manages routes and updates prices  
+    - Handles seat reservations  
 
 - **`TicketService`**  
-    - Gestionează achiziționarea și administrarea biletelor  
-    - Permite cumpărarea de bilete pentru o programare  
-    - Oferă rapoarte privind biletele vândute  
-    - Calculează veniturile totale  
+    - Manages ticket purchasing and administration  
+    - Allows purchasing tickets for a schedule  
+    - Provides reports on sold tickets  
+    - Calculates total revenue  
 
 ---
 
-### Clasa `pkcg.Main`
+### Class `pkcg.Main`
 
-Clasa principală care demonstrează funcționalitățile sistemului:
+The main class that demonstrates the system's functionalities:
 
-- Inițializează serviciile necesare  
-- Creează date de test (`stații`, `trenuri`, `rute`, `programări`, `utilizatori`)  
-- Demonstrează operațiunile disponibile pentru administratori și clienți  
-
----
-
-## Operațiunile disponibile
-
-### Înregistrare și autentificare
-
-- Înregistrare administratori și clienți cu date personale  
-- Autentificare în sistem cu `username` și `parolă`  
-
-### Gestionarea stațiilor
-
-- Adăugarea de stații noi cu număr de peroane  
-- Obținerea listei de stații disponibile  
-
-### Gestionarea trenurilor
-
-- Adăugarea de trenuri noi cu detalii despre tip și capacitate  
-- Vizualizarea trenurilor disponibile  
-
-### Administrarea rutelor
-
-- Crearea de rute între stații cu prețuri de bază  
-- Actualizarea prețurilor pentru rute (doar administrator)  
-- Vizualizarea rutelor disponibile  
-
-### Gestionarea programărilor
-
-- Adăugarea de programări pentru trenuri pe rute specifice  
-- Căutarea programărilor după destinație  
-- Vizualizarea tuturor programărilor  
-
-### Administrarea biletelor
-
-- Cumpărarea de bilete pentru o programare  
-- Selectarea clasei de călătorie (`standard` sau `prima clasă`)  
-- Vizualizarea biletelor pentru un client  
-
-### Rezervări
-
-- Rezervarea locurilor pentru o programare  
-- Confirmarea rezervărilor  
-- Anularea rezervărilor  
-
-### Rapoarte
-
-- Calcularea veniturilor totale din vânzarea biletelor  
+- Initializes the necessary services  
+- Creates test data (`stations`, `trains`, `routes`, `schedules`, `users`)  
+- Demonstrates available operations for administrators and customers  
 
 ---
 
-## Exemplu de utilizare
+## Available Operations
 
-Aplicația demonstrează prin clasa `Main`:
+### Registration and Authentication
 
-### Operațiuni administrative:
+- Register administrators and customers with personal data  
+- Log in to the system with `username` and `password`  
 
-1. Autentificare ca administrator  
-2. Modificarea prețurilor pentru rute  
-3. Vizualizarea rutelor actualizate  
+### Station Management
 
-### Operațiuni pentru clienți:
+- Add new stations with a number of platforms  
+- Retrieve the list of available stations  
 
-1. Autentificare ca client  
-2. Vizualizarea rutelor disponibile  
-3. Cumpărarea unui bilet de călătorie  
+### Train Management
+
+- Add new trains with details about type and capacity  
+- View available trains  
+
+### Route Administration
+
+- Create routes between stations with base prices  
+- Update prices for routes (admin only)  
+- View available routes  
+
+### Schedule Management
+
+- Add schedules for trains on specific routes  
+- Search schedules by destination  
+- View all schedules  
+
+### Ticket Administration
+
+- Purchase tickets for a schedule  
+- Select travel class (`standard` or `first class`)  
+- View tickets for a customer  
+
+### Reservations
+
+- Reserve seats for a schedule  
+- Confirm reservations  
+- Cancel reservations  
+
+### Reports
+
+- Calculate total revenue from ticket sales  
+
+---
+
+## Usage Example
+
+The application demonstrates through the `Main` class:
+
+### Administrative Operations:
+
+1. Log in as an administrator  
+2. Modify prices for routes  
+3. View updated routes  
+
+### Customer Operations:
+
+1. Log in as a customer  
+2. View available routes  
+3. Purchase a travel ticket  
