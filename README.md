@@ -1,161 +1,169 @@
-# README - Railway Station Management System
+# Railway Station Management System
 
-## General Description
+## Project Overview
 
-The application represents a management system for a railway station that allows the administration of trains, routes, stations, and tickets. The system facilitates common operations in a station, such as:
+This application provides a comprehensive management system for railway operations, designed for both administrative staff and customers. It simulates a complete railway station ecosystem with real-time schedule management, ticketing, route planning, and user account management.
 
-- Purchasing tickets
-- Managing routes
-- Scheduling trains
-- User administration
+## Core Features
 
----
+### Administrator Portal
+- **Station Management**: Add, view, and manage railway stations and their platforms
+- **Train Fleet Management**: Register and maintain information about trains, their types, and capacities
+- **Route Planning**: Create and price routes between stations
+- **Schedule Configuration**: Schedule trains on routes with platform assignment and timing
+- **Database Administration**: Clear and reset database when needed
+- **Revenue Analytics**: View comprehensive revenue reports from ticket sales
 
-## Application Structure
+### Customer Portal
+- **Journey Planning**: Browse available routes and train schedules
+- **Ticket Purchasing**: Buy standard or first-class tickets with dynamic pricing
+- **Seat Reservation**: Reserve specific seats on scheduled trains
+- **Account Management**: Register and maintain personal account
+- **Ticket History**: Access all previously purchased tickets
 
-### Package `pkcg.model`
+## Technical Requirements
 
-This package contains the model classes that represent the core entities of the system:
+- **Java**: JDK 11 or higher
+- **Database**: PostgreSQL 12 or higher
+- **JDBC Driver**: PostgreSQL JDBC Driver
+- **Memory**: 2GB RAM minimum
+- **Storage**: 100MB available disk space
 
-- **`User` (abstract class)**  
-    - Base class for authenticated users  
-    - Contains `username` and `password` with authentication methods  
+## Installation Guide
 
-- **`Admin` (extends `User`)**  
-    - Represents system administrators  
-    - Has elevated rights such as modifying prices or adding trains  
+### 1. Database Setup
 
-- **`Customer` (extends `User`)**  
-    - Represents system customers  
-    - Contains personal data (`full name`, `email`)  
-    - Can purchase tickets and make reservations  
+#### Using psql:
+```sql
+CREATE USER mihnea2 WITH PASSWORD 'mihnea2';
+CREATE DATABASE "Proiect_PAO";
+GRANT ALL PRIVILEGES ON DATABASE "Proiect_PAO" TO mihnea2;
+```
 
-- **`Station`**  
-    - Represents a train station  
-    - Includes the station name and available platforms  
-    - Manages the list of platforms in the station  
+#### Using pgAdmin (recomended):
+1. Create a new database named `Proiect_PAO`
+2. Create a user `mihnea2` with password `mihnea2`
+3. Grant all privileges to this user on the database
 
-- **`Platform`**  
-    - Represents a platform in the station  
-    - Has a unique identification number  
+### 2. JDBC Driver Configuration
 
-- **`Train`**  
-    - Represents a train  
-    - Includes `number`, `type`, and `capacity`  
+1. Download the PostgreSQL JDBC driver from [PostgreSQL JDBC Driver](https://jdbc.postgresql.org/download/)
+2. Create a `lib` folder in your project root
+3. Add the downloaded JAR file to this folder
+4. Configure your IDE to include the JAR in your project classpath
 
-- **`Route`**  
-    - Represents a route between two stations  
-    - Contains `departure station`, `destination station`, and `base price`  
+### 3. Application Setup
 
-- **`Schedule`**  
-    - Represents the scheduling of a train on a specific route  
-    - Includes `train`, `route`, `departure time`, `arrival time`, and `platform number`  
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/MihneaVe/Train_Go_Brr_2.git
+   ```
 
-- **`Ticket`**  
-    - Represents a travel ticket  
-    - Contains details about the `customer`, `schedule`, `price`, and `class` (first class or not)  
+2. Navigate to the project directory:
+   ```bash
+   cd railway-station-management
+   ```
 
-- **`Reservation`**  
-    - Represents a seat reservation  
-    - Includes `customer`, `schedule`, `seat number`, and `confirmation status`  
+## Running the Application
 
----
+### From IDE:
+Run the `Main.java` class from your IDE
 
-### Package `pkcg.service`
+## Default Accounts
 
-This package contains the classes that implement business logic:
+The system comes with pre-configured accounts for testing:
 
-- **`UserService`**  
-    - Manages system users  
-    - Allows registration of administrators and customers  
-    - Provides authentication and authorization functionalities  
-    - Maintains the current user session  
+### Administrator Account
+- **Username**: admin
+- **Password**: admin123
 
-- **`StationService`**  
-    - Manages stations, trains, routes, and schedules  
-    - Allows adding and managing stations  
-    - Allows adding and managing trains  
-    - Provides search functionalities by destination station  
-    - Manages routes and updates prices  
-    - Handles seat reservations  
+### Sample Customer Account
+- **Username**: john
+- **Password**: pass123
 
-- **`TicketService`**  
-    - Manages ticket purchasing and administration  
-    - Allows purchasing tickets for a schedule  
-    - Provides reports on sold tickets  
-    - Calculates total revenue  
+## System Architecture
 
----
+The application follows a layered architecture:
 
-### Class `pkcg.Main`
+1. **Presentation Layer**: 
+   - Menu-driven console interface
+   - Input validation and user interaction
 
-The main class that demonstrates the system's functionalities:
+2. **Service Layer**:
+   - Business logic implementation
+   - User authentication and authorization
+   - Ticket price calculation and scheduling
 
-- Initializes the necessary services  
-- Creates test data (`stations`, `trains`, `routes`, `schedules`, `users`)  
-- Demonstrates available operations for administrators and customers  
+3. **Repository Layer**:
+   - Data access and persistence
+   - CRUD operations for all entities
 
----
+4. **Model Layer**:
+   - Core domain entities (Train, Station, Ticket, etc.)
+   - Business rules and relationships
 
-## Available Operations
+## Database Schema
 
-### Registration and Authentication
+The application uses the following relational database schema:
 
-- Register administrators and customers with personal data  
-- Log in to the system with `username` and `password`  
+### Tables
+- **users**: User accounts with role-based permissions
+- **stations**: Railway stations with platform information
+- **trains**: Train information including type and capacity
+- **routes**: Connections between stations with pricing
+- **schedules**: Train assignments to routes with timing details
 
-### Station Management
+### Relationships
+- A route connects exactly two stations (origin and destination)
+- A schedule assigns one train to one route at specific times
+- A ticket is purchased by one customer for one schedule
+- A reservation is made by one customer for one schedule and seat
 
-- Add new stations with a number of platforms  
-- Retrieve the list of available stations  
+## Security Features
 
-### Train Management
+- Password complexity requirements enforced
+- Admin-only operations protected
+- Input validation on all user inputs
+- Password confirmation for sensitive operations
 
-- Add new trains with details about type and capacity  
-- View available trains  
+## Audit & Logging
 
-### Route Administration
+All system actions are logged to `audit.csv` with timestamps for compliance and security monitoring.
 
-- Create routes between stations with base prices  
-- Update prices for routes (admin only)  
-- View available routes  
+## Error Handling
 
-### Schedule Management
+The application implements comprehensive error handling:
+- Database connection issues gracefully managed
+- Input validation with user-friendly error messages
+- Option to return to previous menus from any point
+- Prevention of data inconsistencies
 
-- Add schedules for trains on specific routes  
-- Search schedules by destination  
-- View all schedules  
+## Extending the System
 
-### Ticket Administration
+The modular design allows for easy extension:
+- New entity types can be added by creating model, repository, and service classes
+- Additional user roles can be implemented by extending the User class
+- New report types can be added to the service layer
 
-- Purchase tickets for a schedule  
-- Select travel class (`standard` or `first class`)  
-- View tickets for a customer  
+## Troubleshooting
 
-### Reservations
+### Common Issues
 
-- Reserve seats for a schedule  
-- Confirm reservations  
-- Cancel reservations  
+1. **Database Connection Failed**
+   - Verify PostgreSQL is running
+   - Check credentials in DatabaseService.java
+   - Ensure the JDBC driver is correctly added to classpath
 
-### Reports
+2. **Cannot Login**
+   - Default admin: username "admin", password "pass123"
+   - Check case sensitivity of credentials
+   - Verify the database tables were created successfully
 
-- Calculate total revenue from ticket sales  
+## License
 
----
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Usage Example
+## Contributors
 
-The application demonstrates through the `Main` class:
-
-### Administrative Operations:
-
-1. Log in as an administrator  
-2. Modify prices for routes  
-3. View updated routes  
-
-### Customer Operations:
-
-1. Log in as a customer  
-2. View available routes  
-3. Purchase a travel ticket  
+- Velcea Mihnea-Andrei
+- This `README.md` file has been formatted with the help of AI (Claude 3.7 Sonnet)
